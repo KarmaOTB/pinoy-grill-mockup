@@ -1,0 +1,686 @@
+<title>Pinoy Grill</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,600;0,900;1,600&family=Mulish:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap">
+<style>
+  /* ---------- Tokens ----------
+     A deliberately dark, moody dining-room palette — committed to one visual
+     world, not adaptive to the viewer's OS theme. --primary/--secondary are
+     the exact official Philippine flag hex values, used for solid button
+     fills (paired with white). The "-text" variants are brightened versions
+     of the same hues, used only where red/blue sit directly on the
+     near-black background as text or thin linework. */
+  :root{
+    --bg:#0D0D0C;
+    --bg-alt:#161513;
+    --card:#1C1A17;
+    --fg:#F3ECDD;
+    --fg-muted:#B8AC9B;
+    --primary:#CE1126;
+    --primary-text:#F2564C;
+    --on-primary:#FFFFFF;
+    --secondary:#0038A8;
+    --secondary-text:#5B8AE6;
+    --on-secondary:#FFFFFF;
+    --accent:#FCD116;
+    --on-accent:#241505;
+    --border:rgba(255,255,255,.10);
+    --border-strong:rgba(255,255,255,.20);
+    --ring:#FCD116;
+    --shadow: 0 12px 32px rgba(0,0,0,.55), 0 2px 8px rgba(0,0,0,.4);
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto;} *{animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important;} }
+
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--fg);
+    font-family:'Mulish', ui-sans-serif, system-ui, sans-serif;
+    font-size:16px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{
+    font-family:'Fraunces', ui-serif, Georgia, serif;
+    font-weight:900;
+    font-optical-sizing:auto;
+    text-wrap:balance;
+    margin:0;
+  }
+  .mono{ font-family:'Space Mono', ui-monospace, monospace; }
+  a{ color:inherit; }
+  img{ max-width:100%; }
+  .wrap{ max-width:1180px; margin:0 auto; padding-left:24px; padding-right:24px; }
+  @media (max-width:640px){ .wrap{ padding-left:18px; padding-right:18px; } }
+  :focus-visible{ outline:2px solid var(--ring); outline-offset:2px; }
+
+  .eyebrow{
+    font-family:'Space Mono', monospace;
+    font-size:12.5px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--primary-text);
+    font-weight:700;
+  }
+  .rule{ width:40px; height:2px; background:var(--accent); margin:14px 0 0; border:none; }
+  .rule.center{ margin-left:auto; margin-right:auto; }
+
+  /* ---------- Nav ---------- */
+  .site-nav{
+    position:sticky; top:0; z-index:50;
+    background:rgba(13,13,12,.82);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--border);
+  }
+  .nav-row{
+    display:flex; align-items:center; justify-content:space-between;
+    gap:16px; padding:12px 24px; max-width:1180px; margin:0 auto;
+  }
+  .brand{ display:flex; align-items:center; gap:10px; text-decoration:none; }
+  .brand-mark{ width:38px; height:38px; flex:none; border-radius:50%; object-fit:cover; }
+  .brand-word{ font-family:'Fraunces', serif; font-weight:900; color:var(--fg); font-size:18px; letter-spacing:.01em; }
+
+  .nav-links{ display:flex; align-items:center; gap:26px; list-style:none; margin:0; padding:0; }
+  .nav-links a{
+    text-decoration:none; color:var(--fg-muted);
+    font-weight:700; font-size:13px; letter-spacing:.04em; text-transform:uppercase;
+    padding:6px 2px; border-bottom:2px solid transparent;
+    transition:color 200ms ease, border-color 200ms ease;
+  }
+  .nav-links a:hover, .nav-links a:focus-visible, .nav-links a.active{ color:var(--fg); border-color:var(--accent); }
+
+  .btn-order{
+    display:inline-flex; align-items:center; gap:7px;
+    background:var(--primary); color:var(--on-primary);
+    font-weight:700; font-size:12.5px; letter-spacing:.05em; text-transform:uppercase; text-decoration:none;
+    padding:10px 18px; border-radius:5px; white-space:nowrap;
+    transition:filter 150ms ease, transform 150ms ease;
+  }
+  .btn-order:hover{ filter:brightness(1.12); transform:translateY(-1px); }
+  .btn-order svg{ width:14px; height:14px; }
+
+  .nav-toggle{ display:none; background:none; border:1px solid var(--border-strong); color:var(--fg); border-radius:6px; width:40px; height:40px; align-items:center; justify-content:center; }
+  .nav-toggle svg{ width:20px; height:20px; }
+  .nav-cta-mobile{ display:none; }
+
+  @media (max-width:860px){
+    .nav-links{
+      position:absolute; top:100%; left:0; right:0;
+      background:#0D0D0C; border-bottom:1px solid var(--border);
+      flex-direction:column; align-items:stretch; gap:0;
+      padding:8px 24px 16px; display:none;
+    }
+    .nav-links.open{ display:flex; }
+    .nav-links a{ padding:12px 4px; border-bottom:1px solid var(--border); }
+    .nav-toggle{ display:inline-flex; }
+    .nav-cta-desktop{ display:none; }
+    .nav-cta-mobile{ display:block; padding-top:12px; }
+    .nav-cta-mobile .btn-order{ width:100%; justify-content:center; }
+  }
+
+  /* ---------- Section shells ---------- */
+  section{ padding:84px 0; }
+  @media (max-width:640px){ section{ padding:56px 0; } }
+  [data-band="alt"]{ background:var(--bg-alt); }
+
+  .section-head{ max-width:620px; }
+  .section-head h2{ font-size:clamp(28px,4vw,40px); margin-top:8px; }
+  .section-head p{ color:var(--fg-muted); margin-top:14px; font-size:16.5px; }
+  .section-head.center{ max-width:640px; margin-left:auto; margin-right:auto; text-align:center; }
+
+  /* ---------- Hero (full-bleed photo) ---------- */
+  .hero{
+    position:relative; overflow:hidden;
+    min-height:min(88vh, 680px);
+    display:flex; align-items:flex-end;
+  }
+  .hero-bg{ position:absolute; inset:0; z-index:0; }
+  .hero-bg img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .hero-scrim{
+    position:absolute; inset:0; z-index:1;
+    background:
+      linear-gradient(0deg, rgba(8,8,7,.96) 0%, rgba(8,8,7,.72) 32%, rgba(8,8,7,.22) 62%, rgba(8,8,7,.35) 100%),
+      linear-gradient(100deg, rgba(8,8,7,.55) 0%, rgba(8,8,7,.05) 46%);
+  }
+  .hero-content{ position:relative; z-index:2; padding:64px 0 52px; width:100%; }
+  .hero-tag{ font-family:'Space Mono', monospace; color:var(--accent); font-size:13px; letter-spacing:.18em; text-transform:uppercase; font-weight:700; }
+  .hero h1{ font-size:clamp(46px,8vw,88px); line-height:.94; margin-top:16px; }
+  .hero h1 .w-blue{ color:var(--secondary-text); }
+  .hero h1 .w-red{ color:var(--primary-text); }
+  .hero-sub{ font-size:17.5px; color:#DCD2C2; max-width:44ch; margin-top:18px; }
+
+  .hero-ctas{ display:flex; flex-wrap:wrap; gap:14px; margin-top:30px; }
+  .btn{
+    display:inline-flex; align-items:center; gap:10px;
+    padding:14px 24px; border-radius:6px; font-weight:800; font-size:14.5px;
+    letter-spacing:.02em; text-decoration:none; border:1.5px solid transparent; cursor:pointer;
+    transition:transform 150ms ease, filter 150ms ease, border-color 150ms ease, color 150ms ease;
+  }
+  .btn:hover{ transform:translateY(-2px); }
+  .btn-primary{ background:var(--primary); color:var(--on-primary); box-shadow:var(--shadow); }
+  .btn-primary:hover{ filter:brightness(1.12); }
+  .btn-ghost{ border-color:rgba(255,255,255,.4); color:#fff; }
+  .btn-ghost:hover{ border-color:var(--accent); color:var(--accent); }
+
+  /* delivery-partner badges — color-coded to each platform's real brand color
+     rather than reproducing their logo artwork */
+  .btn-delivery{ background:var(--card); border-color:var(--border-strong); }
+  .btn-delivery svg{ flex:none; }
+  .btn-grubhub{ color:#FF8000; }
+  .btn-grubhub:hover{ background:#FF8000; border-color:#FF8000; color:#1A0F00; }
+  .btn-doordash{ color:#FF3008; }
+  .btn-doordash:hover{ background:#FF3008; border-color:#FF3008; color:#2B0500; }
+  .btn-ubereats{ color:#06C167; }
+  .btn-ubereats:hover{ background:#06C167; border-color:#06C167; color:#052E17; }
+  .btn svg{ width:17px; height:17px; }
+
+  .garnish{ position:absolute; pointer-events:none; filter:drop-shadow(0 10px 18px rgba(0,0,0,.6)); z-index:2; }
+
+  /* ---------- Menu ---------- */
+  .best-row{ display:flex; gap:44px; justify-content:center; flex-wrap:wrap; margin:52px 0 64px; }
+  .best-item{ text-align:center; width:168px; }
+  .best-item img{
+    width:168px; height:168px; border-radius:50%; object-fit:cover;
+    border:3px solid var(--card); box-shadow:var(--shadow);
+  }
+  .best-item b{ display:block; margin-top:16px; font-family:'Fraunces',serif; font-weight:600; font-size:16.5px; }
+  .best-item span{ display:block; margin-top:3px; font-size:11.5px; letter-spacing:.06em; text-transform:uppercase; color:var(--fg-muted); }
+
+  .feature{
+    display:grid; grid-template-columns:.85fr 1fr; gap:52px; align-items:center;
+    padding:56px 0; border-top:1px solid var(--border); border-bottom:1px solid var(--border);
+    margin-bottom:64px;
+  }
+  @media (max-width:760px){ .feature{ grid-template-columns:1fr; } }
+  .feature img{ width:100%; aspect-ratio:5/4; object-fit:cover; border-radius:10px; }
+  .feature-copy h3{ font-size:clamp(26px,3.4vw,34px); margin-top:10px; }
+  .feature-copy p{ color:var(--fg-muted); margin-top:14px; font-size:16px; max-width:48ch; }
+  .feature-copy .price{ display:inline-block; margin-top:18px; font-family:'Space Mono',monospace; color:var(--accent); font-weight:700; font-size:15px; }
+
+  .menu-tabs{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:8px; }
+  .menu-tab{
+    font-family:'Space Mono', monospace; font-size:12.5px; font-weight:700; letter-spacing:.04em; text-transform:uppercase;
+    padding:9px 15px; border-radius:5px; border:1px solid var(--border);
+    background:transparent; color:var(--fg-muted); cursor:pointer;
+    transition:background 180ms ease, color 180ms ease, border-color 180ms ease;
+  }
+  .menu-tab:hover{ border-color:var(--primary-text); color:var(--primary-text); }
+  .menu-tab[aria-selected="true"]{ background:var(--primary); border-color:var(--primary); color:var(--on-primary); }
+
+  .menu-note{ font-size:15px; color:var(--fg-muted); margin:20px 0 8px; max-width:60ch; }
+
+  .menu-list{ display:grid; grid-template-columns:1fr 1fr; column-gap:48px; }
+  @media (max-width:700px){ .menu-list{ grid-template-columns:1fr; } }
+  .menu-row{ padding:18px 0; border-bottom:1px solid var(--border); }
+  .menu-row h3{ font-family:'Mulish',sans-serif; font-weight:800; font-size:16px; color:var(--fg); }
+  .menu-row p{ margin:5px 0 0; font-size:14px; color:var(--fg-muted); }
+
+  /* ---------- Food truck ---------- */
+  .truck-band{ background:var(--secondary); color:var(--on-secondary); }
+  .truck-grid{ display:grid; grid-template-columns:1fr 1fr; gap:48px; align-items:center; }
+  @media (max-width:860px){ .truck-grid{ grid-template-columns:1fr; } }
+  .truck-band .eyebrow{ color:var(--accent); }
+  .truck-band h2{ font-size:clamp(28px,4vw,38px); margin-top:8px; }
+  .truck-band p{ font-size:16.5px; opacity:.92; max-width:52ch; margin-top:14px; }
+  .truck-list{ list-style:none; margin:22px 0 0; padding:0; display:flex; flex-direction:column; gap:10px; }
+  .truck-list li{ display:flex; gap:10px; align-items:flex-start; font-size:15px; }
+  .truck-list svg{ flex:none; width:18px; height:18px; margin-top:2px; color:var(--accent); }
+  .route-card{
+    background:rgba(0,0,0,.2); border:1px solid rgba(255,255,255,.16); border-radius:12px; padding:26px;
+  }
+  .route-card .mono{ font-size:13px; letter-spacing:.06em; text-transform:uppercase; opacity:.75; }
+  .route-card h3{ font-family:'Fraunces',serif; font-weight:900; font-size:24px; margin-top:8px; }
+  .route-card p{ font-size:15px; opacity:.9; margin-top:10px; }
+
+  /* ---------- Our Story ---------- */
+  .story-grid{ display:grid; grid-template-columns:1fr 1fr; gap:56px; align-items:start; }
+  @media (max-width:860px){ .story-grid{ grid-template-columns:1fr; gap:36px; } }
+  .story-grid p{ font-size:17px; max-width:56ch; }
+  .story-quote{
+    border-left:3px solid var(--accent); padding-left:22px;
+    font-family:'Fraunces', serif; font-weight:600; font-style:italic; font-size:23px; line-height:1.35; margin-top:28px;
+  }
+  .story-quote small{ display:block; font-family:'Mulish',sans-serif; font-weight:700; font-size:12.5px; letter-spacing:.06em; text-transform:uppercase; color:var(--fg-muted); margin-top:10px; }
+
+  .owners{ display:flex; flex-direction:column; gap:1px; background:var(--border); border-radius:10px; overflow:hidden; }
+  .owner-card{
+    background:var(--card); padding:20px; display:flex; align-items:center; gap:14px;
+  }
+  .owner-mark{
+    flex:none; width:44px; height:44px; border-radius:50%; background:var(--accent);
+    color:var(--on-accent); display:flex; align-items:center; justify-content:center;
+    font-family:'Fraunces',serif; font-weight:900; font-size:16px;
+  }
+  .owner-card b{ display:block; font-size:16px; }
+  .owner-card span{ color:var(--fg-muted); font-size:13.5px; }
+
+  /* ---------- Press ---------- */
+  .press-row{ display:flex; flex-wrap:wrap; gap:36px; align-items:center; justify-content:space-between; }
+  .press-item{ display:flex; align-items:center; gap:16px; flex:1 1 240px; }
+  .stamp{
+    flex:none; width:60px; height:60px; border-radius:50%;
+    border:2px solid var(--secondary-text); color:var(--secondary-text);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Space Mono', monospace; font-weight:700; font-size:11.5px; text-align:center;
+    transform:rotate(-6deg);
+  }
+  .press-item:nth-child(2) .stamp{ transform:rotate(4deg); }
+  .press-item:nth-child(3) .stamp{ transform:rotate(-3deg); }
+  .press-copy .yr{ font-family:'Space Mono', monospace; font-weight:700; color:var(--primary-text); font-size:12.5px; letter-spacing:.06em; }
+  .press-copy p{ margin:4px 0 0; font-size:15px; font-weight:700; }
+
+  /* ---------- Order/contact ---------- */
+  .order-band{ text-align:center; }
+  .order-band .wrap{ max-width:760px; }
+  .order-phone{
+    font-family:'Space Mono', monospace; font-size:clamp(30px,6vw,48px); font-weight:700;
+    color:var(--primary-text); text-decoration:none; display:inline-block; margin-top:20px;
+  }
+  .order-note{ margin-top:14px; color:var(--fg-muted); font-size:15px; }
+  .order-ctas{ display:flex; flex-wrap:wrap; gap:12px; justify-content:center; margin-top:22px; }
+
+  .map-card{
+    position:relative; display:block; margin:28px auto 0; max-width:560px;
+    border-radius:12px; overflow:hidden; border:1px solid var(--border); box-shadow:var(--shadow);
+    text-decoration:none; transition:border-color 180ms ease, transform 180ms ease;
+  }
+  .map-card:hover{ border-color:var(--border-strong); transform:translateY(-2px); }
+  .map-card svg{ display:block; width:100%; height:auto; }
+  .map-card-cta{
+    position:absolute; right:14px; bottom:14px;
+    background:var(--primary); color:var(--on-primary);
+    font-weight:700; font-size:12.5px; letter-spacing:.03em;
+    padding:8px 14px; border-radius:5px;
+  }
+
+  /* ---------- Footer ---------- */
+  footer{ background:var(--bg-alt); color:var(--fg-muted); padding:44px 0 26px; border-top:1px solid var(--border); }
+  .foot-row{ display:flex; flex-wrap:wrap; justify-content:space-between; gap:28px; align-items:flex-start; }
+  .foot-links{ display:flex; gap:22px; flex-wrap:wrap; list-style:none; margin:0; padding:0; }
+  .foot-links a{ text-decoration:none; color:var(--fg-muted); font-size:13.5px; font-weight:700; }
+  .foot-links a:hover{ color:var(--fg); text-decoration:underline; text-decoration-color:var(--accent); }
+  .foot-bottom{ margin-top:30px; padding-top:20px; border-top:1px solid var(--border); font-size:12.5px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; }
+</style>
+
+<nav class="site-nav">
+  <div class="nav-row">
+    <a class="brand" href="#top">
+      <img class="brand-mark" src="images/logo.png" alt="Pinoy Grill logo">
+      <span class="brand-word">Pinoy Grill</span>
+    </a>
+    <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false" id="navToggle">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#menu">Menu</a></li>
+      <li><a href="#truck">Food Truck</a></li>
+      <li><a href="#story">Our Story</a></li>
+      <li><a href="#press">Press</a></li>
+      <li><a href="#order">Order</a></li>
+      <li class="nav-cta-mobile">
+        <a class="btn-order" href="tel:+12242106132">Order Now</a>
+      </li>
+    </ul>
+    <a class="btn-order nav-cta-desktop" href="tel:+12242106132">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.9.34 1.79.65 2.65a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.43-1.42a2 2 0 0 1 2.11-.45c.86.31 1.75.53 2.65.65A2 2 0 0 1 22 16.92z"/></svg>
+      Order Now
+    </a>
+  </div>
+</nav>
+
+<main id="top">
+
+  <!-- ================= HERO ================= -->
+  <section class="hero">
+    <div class="hero-bg">
+      <img src="images/pinoy-favorites-xl.jpg" alt="Pinoy Favorites Platter: grilled pork and chicken BBQ skewers, crispy lumpia, pansit, and siopao">
+    </div>
+    <div class="hero-scrim"></div>
+    <svg class="garnish" viewBox="0 0 60 100" style="width:64px; top:26px; right:64px; transform:rotate(14deg);" aria-hidden="true">
+      <path d="M30 14 C12 24, 8 54, 19 80 C24 91, 35 92, 40 81 C49 63, 46 29, 30 14 Z" fill="var(--primary)"/>
+      <path d="M27 15 Q20 6 29 2 Q36 8 30 16 Z" fill="#4A7A3E"/>
+    </svg>
+    <svg class="garnish" viewBox="0 0 80 80" style="width:74px; bottom:40px; right:180px; transform:rotate(-12deg);" aria-hidden="true">
+      <circle cx="40" cy="40" r="37" fill="#E7E0B8" stroke="#C7A94A" stroke-width="3"/>
+      <circle cx="40" cy="40" r="27" fill="#F3EFC9"/>
+      <g stroke="#D8C878" stroke-width="1.5">
+        <line x1="40" y1="13" x2="40" y2="67"/><line x1="13" y1="40" x2="67" y2="40"/>
+        <line x1="19" y1="19" x2="61" y2="61"/><line x1="61" y1="19" x2="19" y2="61"/>
+      </g>
+    </svg>
+    <div class="wrap hero-content">
+      <div class="hero-tag">Chicago &middot; Filipino Street Food</div>
+      <h1><span class="w-blue">PINOY</span> <span class="w-red">GRILL</span></h1>
+      <p class="hero-sub">Skewers off the charcoal, noodles off the wok, and desserts shaved to order &mdash; the street food of Manila, cooked fresh for Chicago.</p>
+      <div class="hero-ctas">
+        <a class="btn btn-primary" href="tel:+12242106132">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.9.34 1.79.65 2.65a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.43-1.42a2 2 0 0 1 2.11-.45c.86.31 1.75.53 2.65.65A2 2 0 0 1 22 16.92z"/></svg>
+          Call to Order &mdash; (224) 210-6132
+        </a>
+        <a class="btn btn-ghost" href="#menu">See the Menu</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= MENU ================= -->
+  <section id="menu">
+    <div class="wrap">
+      <div class="section-head center">
+        <div class="eyebrow">The Menu</div>
+        <h2>Best Sellers</h2>
+        <hr class="rule center">
+      </div>
+
+      <div class="best-row">
+        <figure class="best-item">
+          <img src="images/pinoy-favorites-platter.jpg" alt="Pinoy Favorites Platter: BBQ skewers, crispy lumpia, pansit, and siopao">
+          <b>Pinoy Favorites</b>
+          <span>Family Meals</span>
+        </figure>
+        <figure class="best-item">
+          <img src="images/crispy-favorites-platter.jpg" alt="Crispy Favorites Platter: lechon kawali, bangus, fish ball skewers, lumpia, and pansit">
+          <b>Crispy Favorites</b>
+          <span>Family Meals</span>
+        </figure>
+      </div>
+
+      <div class="feature">
+        <img src="images/bangus-sisig-platter.jpg" alt="Bangus Sisig Platter: sizzling milkfish sisig with grilled skewers, lumpia, and pansit">
+        <div class="feature-copy">
+          <div class="eyebrow">Chef's Special</div>
+          <h3>Bangus Sisig</h3>
+          <p>Marinated boneless milkfish with chopped onions, bell pepper, and citrus &mdash; served sizzling alongside grilled skewers, crispy lumpia, and pansit.</p>
+          <span class="price">Ask for today's price</span>
+        </div>
+      </div>
+
+      <div class="section-head">
+        <div class="eyebrow">Full Menu</div>
+        <h2>Six ways to eat like Manila</h2>
+      </div>
+      <div class="menu-tabs" role="tablist" aria-label="Menu categories" id="menuTabs"></div>
+      <p class="menu-note" id="menuNote"></p>
+      <div class="menu-list" id="menuGrid"></div>
+    </div>
+  </section>
+
+  <!-- ================= FOOD TRUCK ================= -->
+  <section id="truck" class="truck-band">
+    <div class="wrap truck-grid">
+      <div>
+        <div class="eyebrow">Food Truck &amp; Catering</div>
+        <h2>Book the truck for your next event</h2>
+        <p>From office parties to backyard birthdays, the Pinoy Grill truck brings the full street-food menu on-site &mdash; skewers grilled fresh, noodles wok-tossed to order, and halo-halo for dessert.</p>
+        <ul class="truck-list">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg> Private events, festivals &amp; office catering</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg> Full street-food &amp; combo menu on-site</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg> As seen on CAN TV, Strictly Dumpling &amp; more</li>
+        </ul>
+        <div class="hero-ctas" style="margin-top:28px;">
+          <a class="btn btn-primary" href="tel:+12242106132">Call to Book the Truck</a>
+        </div>
+      </div>
+      <div class="route-card">
+        <div class="mono">Book the truck</div>
+        <h3>Bring the grill to you</h3>
+        <p>Available for private parties, festivals, and office catering across the Chicago area. Call to check availability, headcount pricing, and menu options for your event.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= STORY ================= -->
+  <section id="story" data-band="alt">
+    <div class="wrap story-grid">
+      <div>
+        <div class="eyebrow">Our Story</div>
+        <h2 style="margin-top:8px;font-size:clamp(28px,4vw,38px);">Family-run, fire-cooked, Filipino to the core</h2>
+        <p style="margin-top:18px;">Pinoy Grill brings the flavors of Manila's street-food stalls to Chicago &mdash; skewers marinated in citrus and soy, noodles stir-fried to order, and the sour, savory, sweet balance that defines Filipino cooking. Everything is cooked fresh to order, ready for pickup or delivery.</p>
+        <div class="story-quote">"Maraming salamat sa inyong pagtangkilik!"
+          <small>Thank you for your support &mdash; the Pinoy Grill family</small>
+        </div>
+      </div>
+      <div class="owners">
+        <div class="owner-card">
+          <div class="owner-mark">SY</div>
+          <div><b>Sharon Yamat</b><span>Co-Owner</span></div>
+        </div>
+        <div class="owner-card">
+          <div class="owner-mark">CY</div>
+          <div><b>Christopher Yamat</b><span>Co-Owner</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= PRESS ================= -->
+  <section id="press">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="eyebrow">As Seen On</div>
+        <h2>Featured beyond the truck window</h2>
+      </div>
+      <div class="press-row" style="margin-top:44px;">
+        <div class="press-item">
+          <div class="stamp">CAN<br>TV</div>
+          <div class="press-copy"><div class="yr">2019</div><p>Chicago Access Network Television</p></div>
+        </div>
+        <div class="press-item">
+          <div class="stamp">S.D.</div>
+          <div class="press-copy"><div class="yr">2022</div><p>Mike Chen's "Strictly Dumpling" on YouTube</p></div>
+        </div>
+        <div class="press-item">
+          <div class="stamp">C.R.</div>
+          <div class="press-copy"><div class="yr">2024</div><p>Chicago Restaurants food truck feature</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= ORDER ================= -->
+  <section id="order" class="order-band" data-band="alt">
+    <div class="wrap">
+      <div class="eyebrow">Order Now</div>
+      <h2 style="margin-top:8px;font-size:clamp(28px,4vw,38px);">Call ahead, or order online</h2>
+      <a class="order-phone" href="tel:+12242106132">(224) 210-6132</a>
+      <p class="order-note">Call for pickup, or order delivery &amp; pickup through Grubhub, DoorDash, or Uber Eats.</p>
+      <div class="order-ctas">
+        <a class="btn btn-primary" href="tel:+12242106132">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.9.34 1.79.65 2.65a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.43-1.42a2 2 0 0 1 2.11-.45c.86.31 1.75.53 2.65.65A2 2 0 0 1 22 16.92z"/></svg>
+          Call to Order
+        </a>
+        <a class="btn btn-delivery btn-grubhub" href="https://www.grubhub.com/restaurant/pinoy-grill-authentic-filipino-street-foods-2324-e-rand-rd-arlington-heights/11179232" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h2l2.4 12.4a2 2 0 0 0 2 1.6h7.2a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="17" cy="20" r="1.4"/></svg>
+          Order on Grubhub
+        </a>
+        <a class="btn btn-delivery btn-doordash" href="https://www.doordash.com/store/pinoy-grill-authentic-filipino-street-foods-arlington-heights-842268/1198988/" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h2l2.4 12.4a2 2 0 0 0 2 1.6h7.2a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="17" cy="20" r="1.4"/></svg>
+          Order on DoorDash
+        </a>
+        <a class="btn btn-delivery btn-ubereats" href="https://www.ubereats.com/store/pinoy-grill/FRJnx8cJSFu3LUkA5rVSMQ" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h2l2.4 12.4a2 2 0 0 0 2 1.6h7.2a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="17" cy="20" r="1.4"/></svg>
+          Order on Uber Eats
+        </a>
+      </div>
+      <a class="map-card" href="https://maps.google.com/?q=2324+E+Rand+Rd,+Arlington+Heights,+IL+60004" target="_blank" rel="noopener" aria-label="Get directions to Pinoy Grill, 2324 E Rand Rd, Arlington Heights, IL">
+        <svg viewBox="0 0 640 240" preserveAspectRatio="none" aria-hidden="true">
+          <rect width="640" height="240" fill="var(--card)"/>
+          <g stroke="var(--border)" stroke-width="1">
+            <line x1="0" y1="40" x2="640" y2="40"/><line x1="0" y1="90" x2="640" y2="90"/>
+            <line x1="0" y1="150" x2="640" y2="150"/><line x1="0" y1="200" x2="640" y2="200"/>
+            <line x1="90" y1="0" x2="90" y2="240"/><line x1="220" y1="0" x2="220" y2="240"/>
+            <line x1="420" y1="0" x2="420" y2="240"/><line x1="560" y1="0" x2="560" y2="240"/>
+          </g>
+          <path d="M-20 210 L 420 10 L 700 -10" stroke="var(--border-strong)" stroke-width="10" fill="none"/>
+          <path d="M-20 210 L 420 10 L 700 -10" stroke="#3A362F" stroke-width="1" stroke-dasharray="6 6" fill="none"/>
+          <text x="120" y="188" fill="var(--fg-muted)" font-family="Space Mono, monospace" font-size="11" letter-spacing="1" transform="rotate(-16 120 188)">E RAND RD</text>
+          <g transform="translate(400,108)">
+            <path d="M0 -34 C15 -34 26 -23 26 -9 C26 8 0 34 0 34 C0 34 -26 8 -26 -9 C-26 -23 -15 -34 0 -34 Z" fill="var(--primary)"/>
+            <circle cx="0" cy="-9" r="9" fill="var(--card)"/>
+          </g>
+          <g transform="translate(400,58)">
+            <rect x="-58" y="-16" width="116" height="26" rx="6" fill="var(--bg)" stroke="var(--border-strong)"/>
+            <text x="0" y="2" fill="var(--accent)" font-family="Fraunces, serif" font-weight="900" font-size="13" text-anchor="middle">PINOY GRILL</text>
+          </g>
+        </svg>
+        <span class="map-card-cta">Get Directions</span>
+      </a>
+      <p class="order-note" style="margin-top:14px;">2324 E Rand Rd, Arlington Heights, IL 60004</p>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-row">
+      <a class="brand" href="#top">
+        <img class="brand-mark" src="images/logo.png" alt="Pinoy Grill logo">
+        <span class="brand-word">Pinoy Grill</span>
+      </a>
+      <ul class="foot-links">
+        <li><a href="#menu">Menu</a></li>
+        <li><a href="#truck">Food Truck</a></li>
+        <li><a href="#story">Our Story</a></li>
+        <li><a href="#press">Press</a></li>
+        <li><a href="#order">Order</a></li>
+      </ul>
+    </div>
+    <div class="foot-bottom">
+      <span>&copy; Pinoy Grill Chicago &middot; 2324 E Rand Rd, Arlington Heights, IL 60004</span>
+      <a href="tel:+12242106132" class="mono">(224) 210-6132</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const MENU = {
+    "Combo Meals": {
+      note: "All combo meals include 2 crispy spring rolls, pansit, rice, and bottled water.",
+      items: [
+        ["Pork BBQ Combo", "2 pork skewers marinated in citrus, soy sauce, spices, garlic, and onions."],
+        ["Chicken BBQ Combo", "2 chicken skewers marinated in citrus, soy sauce, spices, garlic, and onions."],
+        ["Pork Belly BBQ Combo", "Sliced pork belly marinated in citrus, soy sauce, spices, garlic, and onions."],
+        ["Dinuguan Combo", "Pork and chitlins stir-fried in onions and garlic, simmered in spiced vinegar and pork blood."],
+        ["Bangus Combo", "Crispy fried boneless marinated milkfish."],
+        ["Adobong Baboy Combo", "Braised pork &mdash; pork belly braised in vinegar, soy sauce, peppercorns, bay leaves, garlic, and onions."],
+        ["Adobong Manok Combo", "Braised chicken &mdash; chicken braised in vinegar, soy sauce, peppercorns, bay leaves, garlic, and onions."],
+        ["Bistek Tagalog Combo", "Thinly sliced beef marinated in citrus, soy sauce, garlic, onions, and pepper."]
+      ]
+    },
+    "Family Meals": {
+      note: "Order a family-style meal everyone can share and love.",
+      items: [
+        ["Pinoy Favorites Platter", "3 pork BBQ skewers, 3 chicken BBQ skewers, 12 crispy spring rolls, pansit mix."],
+        ["Crispy Favorites Platter", "Lechon kawali, half bangus, 2 fish ball skewers, 12 crispy spring rolls, pansit mix."],
+        ["Streetfood Platter", "3 chicken BBQ, 2 pork BBQ, 3 veal isaw, 2 pork isaw, 2 kwek kwek, 2 tokneneng, 2 fish ball, 2 squid ball skewers, and 4 crispy spring rolls."]
+      ]
+    },
+    "Merienda": {
+      note: "Enjoy a light afternoon snack.",
+      items: [
+        ["Tokwa't Baboy", "Crispy fried tofu and pork in citrus and spices."],
+        ["Fried Siopao", "Deep-fried steamed bun with sweet pork filling."],
+        ["Steamed Siopao", "Steamed bun with sweet pork filling."],
+        ["Crispy Lumpia (15 pcs)", "Crispy spring rolls filled with ground pork and vegetables."],
+        ["Arrozcaldo with Egg", "Filipino congee (lugaw) with chicken, ginger, garlic, and onions."],
+        ["Goto with Egg", "Rice congee with beef tripe, ginger, garlic, and onions."],
+        ["Pansit Kanton", "Stir-fried thick egg noodles with chicken/pork and vegetables."],
+        ["Pansit Bihon", "Stir-fried thin rice noodles with chicken/pork and vegetables."],
+        ["Mixed Pansit", "Egg noodles and rice noodles stir-fried with chicken/pork and vegetables."]
+      ]
+    },
+    "Chef's Special": {
+      note: "Signature dishes cooked by our amazing chef and kitchen staff.",
+      items: [
+        ["Lechon Kawali", "Deep-fried crispy pork belly."],
+        ["Pork Sinigang", "Sour soup made with pork, vegetables, and tamarind broth."],
+        ["Pompano Sinigang", "Sour soup made with pompano fish, vegetables, and tamarind broth."],
+        ["Bangus Sinigang", "Sour soup made with milkfish, vegetables, and tamarind broth."],
+        ["Fried Whole Bangus", "Deep-fried boneless marinated milkfish."],
+        ["Bangus Sisig", "Marinated boneless milkfish with chopped onions, bell pepper, and citrus."],
+        ["Tuna Kinilaw", "Raw tuna cured with fresh ginger, citrus, garlic, cucumber, chilies, and peppers."],
+        ["Bistek Tagalog", "Thinly sliced beef marinated in citrus, soy sauce, garlic, onions, and pepper."],
+        ["Dinuguan", "Pork and chitlins stir-fried in onions and garlic, simmered in spiced vinegar and pork blood."],
+        ["Adobong Baboy", "Braised pork &mdash; belly braised in vinegar, soy sauce, peppercorns, bay leaves, garlic, and onions."],
+        ["Adobong Manok", "Braised chicken &mdash; braised in vinegar, soy sauce, peppercorns, bay leaves, garlic, and onions."],
+        ["Grilled Pork Belly", "Sliced pork belly marinated in citrus, soy sauce, spices, garlic, onions, and pepper."]
+      ]
+    },
+    "Street Food": {
+      note: "Our street food skewers, for an authentic Filipino experience.",
+      items: [
+        ["Pork Isaw", "Barbecued pork intestine on a skewer."],
+        ["Veal Isaw", "Barbecued veal intestine on a skewer."],
+        ["Chicken Gizzard", "Barbecued chicken gizzards on a skewer."],
+        ["Squid Ball", "Bola-bolang pusit &mdash; deep-fried squid paste balls on a skewer."],
+        ["Fish Ball", "Bola-bolang isda &mdash; deep-fried fish paste balls on a skewer."],
+        ["Filipino Hotdog", "Grilled tender, juicy hotdog skewer."],
+        ["Pork BBQ", "Inihaw ng baboy &mdash; savory marinated grilled pork on a skewer."],
+        ["Chicken BBQ", "Inihaw na manok &mdash; savory marinated grilled chicken on a skewer."]
+      ]
+    },
+    "Dessert": {
+      note: "Refreshing dessert to follow your savory meal.",
+      items: [
+        ["Halo-Halo", "Shaved ice with sweetened fruits, evaporated milk, and mango or ube ice cream."],
+        ["Turon with Ice Cream", "Crunchy spring roll filled with sweet banana, topped with ube and mango ice cream."],
+        ["Mais con Yelo", "Shaved ice, sweet corn, evaporated milk, and vanilla ice cream."]
+      ]
+    }
+  };
+
+  const tabsEl = document.getElementById('menuTabs');
+  const gridEl = document.getElementById('menuGrid');
+  const noteEl = document.getElementById('menuNote');
+  const categories = Object.keys(MENU);
+
+  function renderCategory(cat){
+    noteEl.textContent = MENU[cat].note;
+    gridEl.innerHTML = MENU[cat].items.map(([name, desc]) => `
+      <div class="menu-row">
+        <h3>${name}</h3>
+        <p>${desc}</p>
+      </div>
+    `).join('');
+  }
+
+  function renderTabs(active){
+    tabsEl.innerHTML = categories.map(cat => `
+      <button class="menu-tab" role="tab" aria-selected="${cat === active}" data-cat="${cat}">${cat}</button>
+    `).join('');
+    tabsEl.querySelectorAll('.menu-tab').forEach(btn => {
+      btn.addEventListener('click', () => {
+        renderTabs(btn.dataset.cat);
+        renderCategory(btn.dataset.cat);
+      });
+    });
+  }
+
+  renderTabs(categories[0]);
+  renderCategory(categories[0]);
+
+  const navToggle = document.getElementById('navToggle');
+  const navLinks = document.getElementById('navLinks');
+  navToggle.addEventListener('click', () => {
+    const open = navLinks.classList.toggle('open');
+    navToggle.setAttribute('aria-expanded', String(open));
+  });
+  navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    navLinks.classList.remove('open');
+    navToggle.setAttribute('aria-expanded', 'false');
+  }));
+
+  const sections = ['menu','truck','story','press','order'].map(id => document.getElementById(id));
+  const links = Array.from(document.querySelectorAll('.nav-links a'));
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        links.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + entry.target.id));
+      }
+    });
+  }, { rootMargin: '-45% 0px -50% 0px' });
+  sections.forEach(s => s && observer.observe(s));
+</script>
